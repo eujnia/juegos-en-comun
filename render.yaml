@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: steam-games-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22.19.0
+      - key: STEAM_API_KEY
+        sync: false
+      - key: FRONTEND_ORIGIN
+        value: https://eujnia.neocities.org

@@ -1,0 +1,16 @@
+{
+  "name": "steam-games-in-common",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.9.0" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.client.json",
+    "start": "node --env-file-if-exists=.env dist/server/index.js",
+    "dev": "npm run build && node --watch --env-file-if-exists=.env dist/server/index.js",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "export:neocities": "node scripts/export-neocities.mjs"
+  },
+  "dependencies": { "express": "^5.1.0" },
+  "devDependencies": { "@types/express": "^5.0.3", "@types/node": "^22.0.0", "typescript": "^5.9.2" }
+}

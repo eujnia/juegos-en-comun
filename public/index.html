@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111820">
+  <meta name="description" content="Compará bibliotecas de Steam y encontrá los juegos que todos tienen en común.">
+  <title>Steam Games in Common</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./config.js"></script>
+  <script type="module" src="./assets/client/main.js"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="mark" aria-hidden="true"><span></span><span></span></div>
+      <p class="eyebrow">STEAM GAMES IN COMMON</p>
+      <h1>Más bibliotecas.<br><span>Algo en común.</span></h1>
+      <p class="intro">Encontrá el próximo juego para compartir.</p>
+    </header>
+    <form id="compare-form" novalidate>
+      <div id="profiles">
+      <div class="field"><label for="user1"><span class="number">01</span> Perfil de Steam 1</label><input id="user1" name="user1" type="text" placeholder="URL, vanity name o SteamID64" required maxlength="256" autocomplete="off" spellcheck="false" aria-describedby="profile-help"></div>
+      <div class="field"><label for="user2"><span class="number">02</span> Perfil de Steam 2</label><input id="user2" name="user2" type="text" placeholder="URL, vanity name o SteamID64" required maxlength="256" autocomplete="off" spellcheck="false" aria-describedby="profile-help"></div>
+      </div>
+      <button id="add-profile" class="secondary" type="button">+ Agregar persona</button>
+      <p id="profile-help" class="hint">De 2 a 10 personas. Mostramos los juegos que todos tienen. Los perfiles y sus detalles de juegos deben ser públicos.</p>
+      <button type="submit">Comparar <span aria-hidden="true">↗</span></button>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+    <p id="error" role="alert" hidden></p>
+    <section id="results" aria-labelledby="results-title" hidden>
+      <div class="results-heading"><h2 id="results-title"></h2><span class="sort-label">A–Z</span></div>
+      <p id="users" class="hint"></p>
+      <p id="notice" class="hint"></p>
+      <ul id="games"></ul>
+    </section>
+    <footer>Sin cuentas extra. Sólo lo que comparten.<span>Un proyecto independiente, sin afiliación con Valve.</span></footer>
+  </main>
+</body>
+</html>
