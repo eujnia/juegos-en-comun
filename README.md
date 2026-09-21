@@ -2,7 +2,7 @@
 
 Para publicar el frontend en Neocities y el backend en Render, seguí [DEPLOY.md](DEPLOY.md).
 
-Compara de 2 a 10 bibliotecas públicas por `appid`: muestra sólo los juegos que tienen todas las personas. Permite agregar y quitar perfiles y ver las horas de cada usuario. Express + TypeScript + HTML/CSS, sin base de datos ni autenticación propia.
+Compara de 2 a 10 bibliotecas públicas por `appid`: muestra juegos que tengan al menos dos personas, aunque la primera no los tenga. Cada juego muestra los nombres y horas sólo de sus propietarios. Los resultados se ordenan por cantidad de propietarios y, en caso de empate, alfabéticamente. Permite agregar y quitar perfiles. Express + TypeScript + HTML/CSS, sin base de datos ni autenticación propia.
 
 ## Ejecutar
 

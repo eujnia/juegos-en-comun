@@ -48,18 +48,20 @@ test('biblioteca explícitamente vacía y sin coincidencias', async () => {
   assert.deepEqual(disjoint.notices, []);
 });
 
-test('tres personas: sólo juegos de todos, con horas asociadas al SteamID', async () => {
+test('tres personas: juegos de al menos dos, con horas sólo de sus propietarios', async () => {
   const libraries = [
     { game_count: 2, games: [game(1, 'Uno', 60), game(2, 'Dos', 100)] },
-    { game_count: 2, games: [game(2, 'Dos', 200), game(1, 'Uno', 120)] },
-    { game_count: 1, games: [game(1, 'Uno', 180)] }
+    { game_count: 3, games: [game(2, 'Dos', 200), game(1, 'Uno', 120), game(3, 'Tres', 0)] },
+    { game_count: 3, games: [game(1, 'Uno', 180), game(3, 'Tres', 50), game(4, 'Solo', 10)] }
   ];
   const result = await compareLibraries([id1, id2, id3], 'test-secret', steam({ libraries }));
-  assert.equal(result.count, 1);
+  assert.equal(result.count, 3);
+  assert.deepEqual(result.games.map(game => game.appid), [1, 2, 3]);
   assert.deepEqual(result.users.map(user => user.name), ['Euge', 'Andrés', 'Ana']);
   assert.deepEqual(result.games[0].playtimes, [{ steamId: id1, minutes: 60 }, { steamId: id2, minutes: 120 }, { steamId: id3, minutes: 180 }]);
+  assert.deepEqual(result.games[2].playtimes, [{ steamId: id2, minutes: 0 }, { steamId: id3, minutes: 50 }]);
   libraries[2] = { game_count: 0 };
-  assert.equal((await compareLibraries([id1, id2, id3], 'test-secret', steam({ libraries }))).count, 0);
+  assert.equal((await compareLibraries([id1, id2, id3], 'test-secret', steam({ libraries }))).count, 2);
   libraries[2] = {};
   await assert.rejects(compareLibraries([id1, id2, id3], 'test-secret', steam({ libraries })), error => error.code === 'LIBRARY_UNAVAILABLE' && error.message.includes('Usuario 3'));
 });
@@ -96,7 +98,7 @@ test('HTTP: sirve frontend y comparación; no expone clave ni archivos del servi
   try {
     const page = await fetch(base);
     assert.equal(page.status, 200);
-    assert.match(await page.text(), /Perfil de Steam 1/);
+    assert.match(await page.text(), /Persona 1:/);
     assert.equal((await fetch(`${base}/assets/client/main.js`)).status, 200);
     for (const path of ['/.env', '/src/server/steam.ts', '/dist/server/index.js']) assert.equal((await fetch(base + path)).status, 404);
     const result = await fetch(`${base}/api/compare?user1=eujnia&user2=${id2}`);

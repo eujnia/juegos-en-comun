@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createApp } from '../dist/server/app.js';
+import { getMultiplayerApps } from '../dist/server/steam.js';
 
 test('CORS permite sólo el frontend configurado, incluyendo respuestas de error', async () => {
   const origin = 'https://example.neocities.org';
@@ -19,10 +20,27 @@ test('CORS permite sólo el frontend configurado, incluyendo respuestas de error
     assert.equal(other.headers.get('access-control-allow-origin'), null);
     const preflight = await fetch(`${base}/api/compare`, { method: 'OPTIONS', headers: { Origin: origin, 'Access-Control-Request-Method': 'GET' } });
     assert.equal(preflight.status, 204);
-    assert.equal(preflight.headers.get('access-control-allow-methods'), 'GET, OPTIONS');
+    assert.equal(preflight.headers.get('access-control-allow-methods'), 'GET, POST, OPTIONS');
+    assert.equal(preflight.headers.get('access-control-allow-headers'), 'Content-Type');
   } finally { await new Promise(resolve => server.close(resolve)); }
 });
 
 test('rechaza configurar un origen con rutas', () => {
   assert.throws(() => createApp('', fetch, 'https://example.neocities.org/steam'));
+});
+
+test('clasifica multijugador por categorías de Steam Store y conserva desconocidos', async () => {
+  const calls = [];
+  const fetcher = async url => {
+    calls.push(url);
+    const appid = Number(url.searchParams.get('appids'));
+    if (appid === 987003) return new Response('', { status: 429 });
+    const categories = appid === 987001 ? [{ id: 38, description: 'Online Co-op' }] : [{ id: 2, description: 'Single-player' }];
+    return Response.json({ [appid]: { success: true, data: { categories } } });
+  };
+  const result = await getMultiplayerApps([987001, 987002, 987003], fetcher);
+  assert.deepEqual(result.multiplayer, [987001]);
+  assert.deepEqual(result.unknown, [987003]);
+  assert.equal(calls.length, 3);
+  assert.ok(calls.every(url => url.origin === 'https://store.steampowered.com' && url.searchParams.get('filters') === 'categories'));
 });

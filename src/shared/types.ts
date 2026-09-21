@@ -20,3 +20,8 @@ export interface CompareResult {
 export interface ApiError {
   error: { code: string; message: string };
 }
+
+export interface MultiplayerResult {
+  multiplayer: number[];
+  unknown: number[];
+}

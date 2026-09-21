@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111820">
-  <meta name="description" content="Compará bibliotecas de Steam y encontrá los juegos que todos tienen en común.">
-  <title>Steam Games in Common</title>
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Encontrá juegos que compartan al menos dos personas de tu grupo de Steam.">
+  <title>Juegos en común</title>
   <link rel="stylesheet" href="./style.css">
   <script src="./config.js"></script>
   <script type="module" src="./assets/client/main.js"></script>
@@ -13,29 +13,42 @@
 <body>
   <main>
     <header>
-      <div class="mark" aria-hidden="true"><span></span><span></span></div>
-      <p class="eyebrow">STEAM GAMES IN COMMON</p>
-      <h1>Más bibliotecas.<br><span>Algo en común.</span></h1>
-      <p class="intro">Encontrá el próximo juego para compartir.</p>
+      <nav><a href="https://eujnia.neocities.org/" target="_top">volver ↗</a></nav>
+      <div class="header-art">
+      <div class="pixel-party" aria-hidden="true"><span>✦</span><span class="pixel-invader"></span><span>+</span></div>
+      <p class="tiny-note">[ juegos en común de Steam ]</p>
+      <img class="laptop-sticker" src="./img/1GZW2hn.gif" width="156" height="124" alt="" aria-hidden="true">
+      </div>
     </header>
     <form id="compare-form" novalidate>
+      <img class="player-sticker player-sticker-left" src="./img/computerglitch.gif" alt="" aria-hidden="true">
+      <img class="player-sticker player-sticker-right" src="./img/370faba8_original.gif" alt="" aria-hidden="true">
+      <div class="panel-title"><span aria-hidden="true">♥ ♥ ♥</span>Lista los juegos que tengan al menos dos personas</div>
       <div id="profiles">
-      <div class="field"><label for="user1"><span class="number">01</span> Perfil de Steam 1</label><input id="user1" name="user1" type="text" placeholder="URL, vanity name o SteamID64" required maxlength="256" autocomplete="off" spellcheck="false" aria-describedby="profile-help"></div>
-      <div class="field"><label for="user2"><span class="number">02</span> Perfil de Steam 2</label><input id="user2" name="user2" type="text" placeholder="URL, vanity name o SteamID64" required maxlength="256" autocomplete="off" spellcheck="false" aria-describedby="profile-help"></div>
+      <div class="field"><label for="user1">Persona 1:</label><input id="user1" name="user1" type="text" placeholder="Profile URL, Custom URL, or SteamID64" required maxlength="256" autocomplete="off" spellcheck="false" aria-describedby="profile-help"></div>
+      <div class="field"><label for="user2">Persona 2:</label><input id="user2" name="user2" type="text" placeholder="Profile URL, Custom URL, or SteamID64" required maxlength="256" autocomplete="off" spellcheck="false" aria-describedby="profile-help"></div>
       </div>
       <button id="add-profile" class="secondary" type="button">+ Agregar persona</button>
-      <p id="profile-help" class="hint">De 2 a 10 personas. Mostramos los juegos que todos tienen. Los perfiles y sus detalles de juegos deben ser públicos.</p>
-      <button type="submit">Comparar <span aria-hidden="true">↗</span></button>
+      <p id="profile-help" class="hint">* Los perfiles tienen que ser públicos.</p>
+      <button type="submit">Comparar <span aria-hidden="true">▶</span></button>
     </form>
     <p id="status" role="status" aria-live="polite"></p>
     <p id="error" role="alert" hidden></p>
     <section id="results" aria-labelledby="results-title" hidden>
-      <div class="results-heading"><h2 id="results-title"></h2><span class="sort-label">A–Z</span></div>
+      <div class="results-heading">
+        <h2 id="results-title"></h2>
+        <label class="sort-label" for="sort-games">Ordenar:</label>
+        <select id="sort-games">
+          <option value="people">Más personas</option>
+          <option value="alphabetical">Alfabético</option>
+        </select>
+      </div>
+      <label class="multiplayer-filter"><input id="multiplayer-only" type="checkbox"> Mostrar sólo multijugador</label>
       <p id="users" class="hint"></p>
       <p id="notice" class="hint"></p>
       <ul id="games"></ul>
     </section>
-    <footer>Sin cuentas extra. Sólo lo que comparten.<span>Un proyecto independiente, sin afiliación con Valve.</span></footer>
+    <footer><div class="footer-badges" aria-hidden="true"><img src="./img/stamp37.png" width="99" height="56" alt="" loading="lazy"><span>MEJOR<br>EN EQUIPO</span><img src="./img/computer.gif" width="48" height="48" alt="" loading="lazy"><img src="./img/tumblr_inline_mju0iy4ZBi1roozkr540.gif" width="48" height="32" alt="" loading="lazy"></div></footer>
   </main>
 </body>
 </html>

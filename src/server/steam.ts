@@ -20,6 +20,49 @@ interface Player {
 }
 
 const steamFailure = () => new AppError(502, 'STEAM_ERROR', 'No pudimos consultar Steam. Intentá nuevamente en unos minutos.');
+const multiplayerCategories = new Set([1, 9, 20, 24, 27, 36, 37, 38, 39, 44, 47, 48, 49]);
+const multiplayerCache = new Map<number, { value: boolean; expiresAt: number }>();
+
+export async function getMultiplayerApps(appids: number[], fetcher: typeof fetch = fetch) {
+  const multiplayer: number[] = [];
+  const unknown: number[] = [];
+  let cursor = 0;
+
+  async function classify(appid: number): Promise<void> {
+    const cached = multiplayerCache.get(appid);
+    if (cached && cached.expiresAt > Date.now()) {
+      (cached.value ? multiplayer : []).push(appid);
+      return;
+    }
+    const url = new URL('https://store.steampowered.com/api/appdetails');
+    url.search = new URLSearchParams({ appids: String(appid), filters: 'categories', l: 'english' }).toString();
+    try {
+      const response = await fetcher(url, { signal: AbortSignal.timeout(8000) });
+      if (!response.ok) { unknown.push(appid); return; }
+      const body = await response.json();
+      const entry = body?.[String(appid)];
+      if (!entry?.success || !Array.isArray(entry.data?.categories)) { unknown.push(appid); return; }
+      const value = entry.data.categories.some((category: unknown) =>
+        typeof category === 'object' && category !== null &&
+        Number.isInteger((category as { id?: unknown }).id) &&
+        multiplayerCategories.has((category as { id: number }).id)
+      );
+      multiplayerCache.set(appid, { value, expiresAt: Date.now() + 24 * 60 * 60 * 1000 });
+      if (value) multiplayer.push(appid);
+    } catch {
+      unknown.push(appid);
+    }
+  }
+
+  const workers = Array.from({ length: Math.min(5, appids.length) }, async () => {
+    while (cursor < appids.length) {
+      const appid = appids[cursor++];
+      await classify(appid);
+    }
+  });
+  await Promise.all(workers);
+  return { multiplayer, unknown };
+}
 
 export function parseProfile(input: string): { kind: 'id' | 'vanity'; value: string } {
   let value = input.trim();
@@ -99,17 +142,25 @@ export async function compareLibraries(inputs: string[], key: string, fetcher: t
   }));
   const maps = libraries.map(library => new Map(library.map(game => [game.appid, game])));
   const games: CommonGame[] = [];
-  for (const game of libraries[0]) {
-    if (!maps.every(library => library.has(game.appid))) continue;
-    const copies = maps.map(library => library.get(game.appid)!);
+  const appids = new Set(maps.flatMap(library => [...library.keys()]));
+  for (const appid of appids) {
+    const owners = maps.flatMap((library, index) => {
+      const copy = library.get(appid);
+      return copy ? [{ copy, steamId: ids[index] }] : [];
+    });
+    if (owners.length < 2) continue;
+    const copies = owners.map(owner => owner.copy);
     const hash = copies.find(copy => copy.img_icon_url)?.img_icon_url;
     games.push({
-      appid: game.appid, name: copies.find(copy => copy.name)?.name || `Juego ${game.appid}`,
-      ...(typeof hash === 'string' && /^[a-f0-9]{40}$/i.test(hash) ? { iconUrl: `https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/${game.appid}/${hash}.jpg` } : {}),
-      playtimes: copies.map((copy, index) => ({ steamId: ids[index], minutes: copy.playtime_forever ?? 0 }))
+      appid, name: copies.find(copy => copy.name)?.name || `Juego ${appid}`,
+      ...(typeof hash === 'string' && /^[a-f0-9]{40}$/i.test(hash) ? { iconUrl: `https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/${appid}/${hash}.jpg` } : {}),
+      playtimes: owners.map(({ copy, steamId }) => ({ steamId, minutes: copy.playtime_forever ?? 0 }))
     });
   }
-  games.sort((a, b) => a.name.localeCompare(b.name, 'es', { sensitivity: 'base' }));
+  games.sort((a, b) =>
+    b.playtimes.length - a.playtimes.length ||
+    a.name.localeCompare(b.name, 'es', { sensitivity: 'base' })
+  );
   return { count: games.length, users, games,
     notices: libraries.flatMap((games, index) => games.length ? [] : [`${users[index].name} no tiene juegos visibles en su biblioteca.`]) };
 }

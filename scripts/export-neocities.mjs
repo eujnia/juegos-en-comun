@@ -12,7 +12,7 @@ await writeFile('neocities-upload/index.html', `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Steam Games in Common</title>
+  <title>Juegos en común · Steam</title>
   <style>
     :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #111820; color: #e8edf2; }
     body { margin: 0; }

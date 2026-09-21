@@ -1,50 +1,81 @@
-:root { color-scheme: dark; font-family: Inter, "Segoe UI", system-ui, sans-serif; background: #111820; color: #e8edf2; font-synthesis: none; }
+@font-face { font-family: "Pixel NES"; src: url("./fonts/Pixel_NES.woff") format("woff"); font-display: swap; }
+:root { color-scheme: dark; color: #e6e9e7; font-family: "MS UI Gothic", Tahoma, sans-serif; --green: #55bfa1; --note-green: #899e90; --line: #21483e; }
 * { box-sizing: border-box; }
-body { margin: 0; min-width: 280px; border-top: 3px solid #7bb9ca; }
-main { width: min(100% - 48px, 580px); margin: 76px auto 32px; }
-header { margin-bottom: 38px; }
-.mark { display: flex; margin-bottom: 28px; height: 28px; align-items: center; }
-.mark span { width: 27px; height: 27px; border: 1.5px solid #87c4d4; border-radius: 8px; transform: rotate(-12deg); }
-.mark span + span { margin-left: -9px; transform: rotate(12deg); background: #87c4d41c; }
-.eyebrow { font-size: 10px; letter-spacing: 2.4px; color: #a7bbc8; font-weight: 650; }
-h1 { font-size: clamp(34px, 7vw, 46px); line-height: 1.16; letter-spacing: -1.7px; font-weight: 550; margin: 20px 0 15px; }
-h1 span { color: #8bc0ce; }
-.intro { color: #9caab8; font-size: 15px; line-height: 1.6; }
-.field + .field { margin-top: 22px; }
+html { min-height: 100%; background: #000 url("./img/fndo.gif") repeat; background-size: auto; }
+body { margin: 0; min-width: 280px; min-height: 100vh; display: flow-root; }
+main { width: min(100% - 48px, 680px); margin: 30px auto 38px; }
+a { color: #ddd; text-decoration: none; }
+a:hover { color: var(--green); }
+nav { display: flex; justify-content: flex-end; gap: 20px; align-items: center; font-size: 12px; }
+.eyebrow { color: #91a69c; font-family: monospace; }
+header { position: relative; margin-bottom: 35px; }
+.header-art { display: grid; grid-template-columns: 120px minmax(0, 1fr) 100px; align-items: center; gap: 16px; margin-top: 22px; min-height: 100px; }
+.laptop-sticker { width: 100px; height: auto; image-rendering: pixelated; pointer-events: none; }
+.player-sticker { position: absolute; top: 50%; width: 160px; height: auto; transform: translateY(-50%); image-rendering: pixelated; pointer-events: none; }
+.player-sticker-left { left: -180px; }
+.player-sticker-right { right: -250px; width: 240px; }
+.pixel-party { margin: 0; display: flex; align-items: center; gap: 26px; color: var(--green); }
+.pixel-party > span:first-child { font-size: 23px; }
+.pixel-party > span:last-child { color: #758579; }
+.pixel-invader { display: block; width: 4px; height: 4px; margin: 4px 30px 23px 2px; background: transparent; box-shadow: 8px 0 #55bfa1,28px 0 #55bfa1,12px 4px #55bfa1,24px 4px #55bfa1,8px 8px #55bfa1,12px 8px #55bfa1,16px 8px #55bfa1,20px 8px #55bfa1,24px 8px #55bfa1,28px 8px #55bfa1,4px 12px #55bfa1,8px 12px #55bfa1,16px 12px #55bfa1,20px 12px #55bfa1,28px 12px #55bfa1,32px 12px #55bfa1,0 16px #55bfa1,8px 16px #55bfa1,12px 16px #55bfa1,16px 16px #55bfa1,20px 16px #55bfa1,24px 16px #55bfa1,28px 16px #55bfa1,36px 16px #55bfa1,0 20px #55bfa1,8px 20px #55bfa1,28px 20px #55bfa1,36px 20px #55bfa1,12px 24px #55bfa1,24px 24px #55bfa1; }
+h1 { font-family: "Pixel NES", monospace; font-size: clamp(25px, 5.8vw, 43px); line-height: 1.55; font-weight: normal; margin: 0 0 18px; letter-spacing: -1px; }
+h1 span { color: var(--green); }
+.intro { font-size: 16px; line-height: 1.7; margin: 0; color: #b8c2bb; }
+.tiny-note { margin: 0; text-align: center; color: var(--note-green); font: 11px/1.7 monospace; }
+form { position: relative; padding: 25px; border: 1px solid var(--line); background: #080e0b; box-shadow: 5px 5px 0 #0d2118; }
+.panel-title { display: flex; justify-content: space-between; gap: 10px; margin: -25px -25px 25px; padding: 13px 18px; border-bottom: 1px solid var(--line); color: var(--green); font: 12px monospace; background: #0d1913; }
+.panel-title > span:last-child { letter-spacing: 4px; }
 .field { position: relative; }
-.field label { padding-right: 65px; }
-button.secondary { margin-top: 18px; background: transparent; color: #94c9d6; border: 1px solid #33424f; }
-button.secondary:hover { background: #18222c; }
-button.remove-profile { position: absolute; right: 0; top: -5px; width: auto; padding: 5px 0 5px 12px; background: transparent; color: #a7bbc8; font-size: 12px; font-weight: 400; }
-button.remove-profile:hover { color: #f1beb7; }
-label { display: block; font-size: 13px; margin-bottom: 10px; }
-.number { color: #7d939f; font-size: 10px; margin-right: 9px; font-variant-numeric: tabular-nums; }
-input { width: 100%; background: #18222c; color: #edf4fa; border: 1px solid #33424f; border-radius: 7px; padding: 16px; font: inherit; font-size: 14px; transition: border-color .15s; }
-input::placeholder { color: #8595a3; }
-input:focus { border-color: #8bc0ce; outline: 2px solid #8bc0ce30; outline-offset: 2px; }
-input[aria-invalid="true"] { border-color: #e3a29b; }
-.hint { font-size: 12px; line-height: 1.6; color: #96a7b6; }
-#profile-help { margin: 15px 0 23px; }
-button { width: 100%; display: flex; justify-content: center; gap: 12px; align-items: center; background: #94c9d6; color: #101c24; border: 0; padding: 15px; font: inherit; font-weight: 650; font-size: 14px; border-radius: 7px; cursor: pointer; }
-button:hover { background: #b1dde6; }
-button:focus-visible { outline: 2px solid #e1f6ff; outline-offset: 4px; }
-button:disabled { cursor: wait; opacity: .65; }
+.field + .field { margin-top: 23px; }
+label { display: block; margin-bottom: 10px; padding-right: 65px; font-size: 14px; }
+.number { color: var(--green); font: 12px monospace; margin-right: 9px; }
+input { width: 100%; background: #000; color: #f0f4ef; border: 1px solid #3b5346; border-radius: 0; padding: 14px; font: 14px "MS UI Gothic", Tahoma, sans-serif; }
+input::placeholder { color: #8b9d91; }
+input:focus { border-color: #789487; outline: none; background-color: #030805; }
+input[aria-invalid="true"] { border-color: var(--note-green); }
+.hint { font-size: 13px; line-height: 1.6; color: #9bae9f; }
+#profile-help { margin: 18px 0 24px; }
+button { width: 100%; border: 1px solid #9ed9bc; border-radius: 0; padding: 15px; font: 13px "Pixel NES", monospace; background: #79b89a; color: #07150d; cursor: pointer; box-shadow: 3px 3px 0 #304f3d; }
+button:hover { background: #a2d0b3; }
+button:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 #304f3d; }
+button:focus-visible, a:focus-visible { outline: 2px solid #c6e9d3; outline-offset: 4px; }
+button:disabled { cursor: wait; opacity: .6; }
+button.secondary { margin-top: 19px; padding: 8px 0; width: auto; background: transparent; color: var(--green); font: 13px monospace; border: 0; box-shadow: none; }
+button.secondary:hover { color: #c6e9d3; }
+button.secondary:disabled { cursor: default; }
+button.remove-profile { position: absolute; top: -4px; right: 0; width: auto; padding: 4px 0 4px 12px; background: transparent; color: #aaa; font: 12px Tahoma, sans-serif; border: 0; box-shadow: none; }
+button.remove-profile:hover { color: var(--note-green); }
 #status:empty { display: none; }
-#status { font-size: 13px; color: #b2c9d3; margin: 22px 0; }
-#error { background: #33242a; color: #f1beb7; border: 1px solid #63414a; padding: 16px; border-radius: 7px; font-size: 14px; line-height: 1.6; }
-#results { margin-top: 43px; }
-.results-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-h2 { font-size: 21px; font-weight: 550; letter-spacing: -.5px; margin: 0; }
-.sort-label { font-size: 10px; color: #a2b3bf; letter-spacing: 1px; }
+#status { margin: 24px 0; color: #a1cfb5; font: 12px/1.7 monospace; }
+#error { color: var(--note-green); padding: 0; font-size: 14px; line-height: 1.6; }
+#results { margin-top: 43px; padding: 22px; background: #050b08; border: 1px solid var(--line); }
+.results-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 9px; border-bottom: 1px dashed var(--line); padding-bottom: 18px; }
+h2 { font: normal clamp(13px, 3vw, 18px)/1.7 "Pixel NES", monospace; color: var(--green); margin: 0; }
+.sort-label { white-space: nowrap; font: 11px monospace; color: #a4b6a9; }
+#sort-games { appearance: none; min-width: 128px; padding: 7px 24px 7px 9px; color: var(--note-green); background: #050b08 linear-gradient(45deg, transparent 50%, var(--note-green) 50%) calc(100% - 10px) 50% / 5px 5px no-repeat; border: 1px solid #3b5346; border-radius: 0; font: 11px monospace; cursor: pointer; }
+#sort-games:focus { border-color: var(--note-green); outline: none; }
+.multiplayer-filter { display: flex; align-items: center; gap: 9px; width: fit-content; margin: 17px 0 0; padding: 7px 9px; color: var(--note-green); border: 1px solid #31463a; font: 11px monospace; cursor: pointer; }
+.multiplayer-filter:hover { border-color: var(--note-green); }
+.multiplayer-filter input { appearance: none; width: 11px; height: 11px; margin: 0; padding: 0; border: 1px solid var(--note-green); background: #000; cursor: pointer; }
+.multiplayer-filter input:checked { background: var(--green); box-shadow: inset 0 0 0 2px #07150d; }
+.multiplayer-filter input:disabled { opacity: .5; cursor: wait; }
 #users { overflow-wrap: anywhere; }
-#games { padding: 0; list-style: none; margin: 22px 0 0; }
-.game { display: flex; gap: 16px; align-items: center; padding: 19px 0; border-top: 1px solid #2a3641; }
-.game-icon { width: 40px; height: 40px; flex: 0 0 40px; border-radius: 7px; background: #263542; display: grid; place-items: center; color: #92b4c5; font-size: 18px; }
-.game-icon img { width: 100%; height: 100%; border-radius: inherit; }
-.game h3 { font-size: 15px; font-weight: 550; margin: 0 0 6px; overflow-wrap: anywhere; }
-.game p { display: flex; flex-wrap: wrap; column-gap: 16px; row-gap: 5px; color: #9cafbd; font-size: 12px; margin: 0; overflow-wrap: anywhere; }
+#games { list-style: none; padding: 0; margin: 22px 0 0; }
+.game { display: flex; align-items: center; gap: 16px; padding: 20px 0; border-bottom: 1px solid #17271d; }
+.game-icon { flex: 0 0 40px; width: 40px; height: 40px; display: grid; place-items: center; background: #102017; border: 1px solid #3b5346; color: var(--green); font: 18px monospace; }
+.game-icon img { width: 100%; height: 100%; image-rendering: pixelated; }
 .game > div:last-child { min-width: 0; }
-footer { border-top: 1px solid #2a3641; margin-top: 44px; padding-top: 23px; color: #94a4b1; font-size: 11px; line-height: 1.7; }
-footer span { display: block; font-size: 10px; color: #7f909f; margin-top: 5px; }
+.game h3 { font-size: 16px; font-weight: normal; color: #e1e9e0; margin: 0 0 8px; overflow-wrap: anywhere; }
+.game p { display: flex; flex-wrap: wrap; column-gap: 17px; row-gap: 6px; color: #a3b5a8; font: 12px/1.5 monospace; margin: 0; overflow-wrap: anywhere; }
+footer { text-align: center; margin-top: 55px; padding-top: 25px; font: 11px/1.8 monospace; }
+footer p { font: 11px "Pixel NES", monospace; color: var(--green); margin: 24px 0 12px; }
+footer > span, footer small { display: block; color: #96a298; margin-top: 16px; }
+footer small { font-size: 10px; margin-top: 6px; color: #89918b; }
+.footer-badges { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; }
+.footer-badges img { object-fit: contain; image-rendering: pixelated; height: auto; }
+.footer-badges span { width: 88px; padding: 4px; border: 2px ridge #4d7660; background: repeating-linear-gradient(0deg, #11251a 0 2px, #0a170f 2px 4px); color: #b3dbbf; font: bold 10px/1.2 monospace; letter-spacing: 1px; }
 [hidden] { display: none !important; }
-@media (max-width: 480px) { main { width: calc(100% - 40px); margin-top: 42px; } header { margin-bottom: 30px; } }
+@media (max-width: 480px) { main { width: calc(100% - 32px); margin-top: 22px; } form { padding: 18px; } .panel-title { margin: -18px -18px 22px; padding: 12px; font-size: 11px; } nav { font-size: 11px; } .eyebrow { font-size: 10px; } }
+@media (max-width: 1220px) { form { margin-top: 130px; } .player-sticker { width: 100px; top: -110px; transform: none; } .player-sticker-left { left: 0; } .player-sticker-right { right: -8px; width: 150px; } }
+@media (max-width: 600px) { .header-art { grid-template-columns: 44px minmax(0, 1fr) 64px; gap: 8px; } .pixel-party > span:first-child, .pixel-party > span:last-child { display: none; } .laptop-sticker { width: 64px; } .tiny-note { font-size: 10px; } #results { padding: 16px; } .results-heading { grid-template-columns: 1fr auto; } .results-heading h2 { grid-column: 1 / -1; } }
+@media (prefers-reduced-motion: reduce) { .laptop-sticker, .player-sticker, .footer-badges img[src$=".gif"] { display: none; } }

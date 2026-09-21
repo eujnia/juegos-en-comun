@@ -6,3 +6,6 @@ public/assets/
 !.env.example
 *.log
 neocities-upload/
+/img/
+*.lnk
+/public/img/computer_085.gif
