@@ -1,0 +1,8 @@
+node_modules/
+dist/
+public/assets/
+.env
+.env.*
+!.env.example
+*.log
+neocities-upload/
